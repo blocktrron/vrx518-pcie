@@ -24,7 +24,6 @@
 #define __VRX318_ATM_TC_H__
 
 #include <linux/atm.h>
-#include <linux/zy_prio_queue_map.h>
 
 /* ATM Info */
 #define CELL_SIZE		ATM_AAL0_SDU
@@ -451,7 +450,6 @@ struct atm_pvc {
 	struct atm_vcc *vcc; /* opened VCC */
 	struct net_device *dev; /* net device associated with atm VCC */
 	struct timespec access_time; /* time when last user cell arrived */
-	struct pq_map pqmap;
 	unsigned int prio_tx_packets[ATM_PRIO_Q_NUM];
 	struct atm_stats stats;
 	unsigned int port; /* to which port the connection belongs */
