@@ -23,6 +23,8 @@
 #ifndef __PTM_TC_H__
 #define __PTM_TC_H__
 
+#include <linux/zy_prio_queue_map.h>
+
 #define OUTQ_DESC_PER_Q		32
 #define OUTQ_PNUM		2
 #define OUTQ_DESC_NUM		(OUTQ_DESC_PER_Q * OUTQ_PNUM)
@@ -122,6 +124,7 @@ struct ptm_priv {
 	spinlock_t ptm_lock;
 	struct rtnl_link_stats64 stats64;
 	int subif_id;
+	struct pq_map pqmap;
 	u32 outq_map[OUTQ_PNUM];
 };
 
