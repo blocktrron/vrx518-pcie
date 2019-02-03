@@ -41,9 +41,7 @@
 #include <linux/atmioc.h>
 #include <linux/skbuff.h>
 #include "inc/dsl_tc.h"
-#include <net/datapath_proc_api.h>
 #include <linux/atm.h>
-#include <net/datapath_api.h>
 #include <net/dc_ep.h>
 #include<linux/sched.h>
 #include<linux/kthread.h>

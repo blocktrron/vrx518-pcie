@@ -38,7 +38,6 @@
 #include <linux/seq_file.h>
 #include <linux/printk.h>
 #include <linux/etherdevice.h>
-#include <net/datapath_proc_api.h>
 
 #include "inc/tc_main.h"
 #include "inc/reg_addr.h"

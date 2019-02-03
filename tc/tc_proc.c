@@ -24,7 +24,6 @@
 
 #include <linux/fs.h>
 #include <linux/seq_file.h>
-#include <net/datapath_api.h>
 #include <net/genetlink.h>
 #include <linux/time.h>
 #include "inc/tc_main.h"
