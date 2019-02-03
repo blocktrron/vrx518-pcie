@@ -196,19 +196,6 @@ static inline void aca_ring_addr_init(struct dc_ep_dev *ep_dev,
 	ring->aca_cnt_phyaddr = ep_dev->phy_membase + addr;
 }
 
-static inline int __skb_put_padto(struct sk_buff *skb, unsigned int len)
-{
-	unsigned int size = skb->len;
-
-	if (unlikely(size < len)) {
-		len -= size;
-		if (skb_pad(skb, len))
-			return -ENOMEM;
-		__skb_put(skb, len);
-	}
-	return 0;
-}
-
 extern int showtime_stat(struct tc_priv *);
 extern void dump_skb_info(struct tc_priv *, struct sk_buff *, u32);
 extern void *tc_buf_alloc(void *, size_t, u32 *,
