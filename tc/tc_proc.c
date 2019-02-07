@@ -26,6 +26,10 @@
 #include <linux/seq_file.h>
 #include <net/genetlink.h>
 #include <linux/time.h>
+#include <linux/proc_fs.h>
+#include <linux/atmdev.h>
+#include <linux/netdevice.h>
+#include <uapi/linux/if_link.h>
 #include "inc/tc_main.h"
 #include "inc/reg_addr.h"
 #include "inc/tc_common.h"
