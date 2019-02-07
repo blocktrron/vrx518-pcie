@@ -22,6 +22,8 @@
 *******************************************************************************/
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+#define IFF_PTM_DATAPATH 0x800000	/* device used as PTM datapath */
+
 #include <linux/module.h>
 #include <linux/version.h>
 #include <linux/init.h>
@@ -46,6 +48,7 @@
 #include "inc/ptm_tc.h"
 #include "inc/tc_proc.h"
 #include "inc/dsl_tc.h"
+#include "inc/zy_prio_queue_map.h"
 
 #if defined(__LITTLE_ENDIAN)
 #include "inc/fw/unified_qos_ds_base_vrx518_le.h"
@@ -210,7 +213,7 @@ static int get_netif_qid_with_pkt(struct sk_buff *skb, void *arg, int is_atm_vcc
 }
 #endif
 
-static struct rtnl_link_stats64 *ptm_get_stats(struct net_device *dev,
+static void ptm_get_stats(struct net_device *dev,
 					struct rtnl_link_stats64 *storage)
 {
 	struct ptm_priv *ptm_tc = netdev_priv(dev);
@@ -220,7 +223,7 @@ static struct rtnl_link_stats64 *ptm_get_stats(struct net_device *dev,
 	else
 		storage->tx_errors += ptm_tc->stats64.tx_errors;
 
-	return storage;
+	return;
 }
 
 static int ptm_set_mac_address(struct net_device *dev, void *p)
@@ -531,7 +534,7 @@ static int ptm_xmit(struct sk_buff *skb, struct net_device *dev)
 	if (!showtime_stat(ptm_tc->tc_priv))
 		goto PTM_XMIT_DROP;
 
-	if (__skb_put_padto(skb, ETH_ZLEN))
+	if (__skb_put_padto(skb, ETH_ZLEN, true))
 		goto PTM_XMIT_DROP;
 
 	dump_skb_info(ptm_tc->tc_priv, skb, (MSG_TX | MSG_TXDATA));
