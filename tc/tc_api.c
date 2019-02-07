@@ -53,18 +53,23 @@ static const char ppe_fw_name[] = "ppe_fw.bin";
 #define VRX518_PPE_FW_ID		0xB
 #define MD5_LEN				16
 
+#define VRX518_GENL_MCAST_GROUP_NAME           "vrx518_mc_grp"
+
+static const struct genl_multicast_group tc_ml_grp[] = {
+	{ .name = VRX518_GENL_MCAST_GROUP_NAME, },
+};
+
 /* TC message genelink family */
 static struct genl_family tc_gnl_family = {
+# if 0
 	.id = GENL_ID_GENERATE,	/* To generate an id for the family*/
+#endif
 	.hdrsize = 0,
 	.name = TC_FAMILY_NAME,	/*family name, used by userspace application*/
 	.version = 1,		/*version number  */
 	.maxattr = TC_A_MAX - 1,
-};
-
-/* TC message multicast group */
-static struct genl_multicast_group tc_ml_grp = {
-	.name = TC_MCAST_GRP_NAME,
+	.mcgrps = tc_ml_grp,
+	.n_mcgrps = ARRAY_SIZE(tc_ml_grp),
 };
 
 /**
@@ -569,7 +574,7 @@ int tc_ntlk_msg_send(struct tc_priv *priv, int pid, int tc_mode, int tc_action,
 	nla_put_u32(skb, TC_A_LINENO, ln_no);
 
 	genlmsg_end(skb, msg_head);
-	ret = genlmsg_multicast(skb, pid, tc_ml_grp.id, GFP_KERNEL);
+	ret = genlmsg_multicast(&tc_gnl_family, skb, pid, 0, GFP_KERNEL);
 	if (ret) {
 		tc_err(priv, MSG_EVENT, "Sent TC multicast message Fail!\n");
 		goto err1;
@@ -591,21 +596,11 @@ int tc_gentlk_init(struct tc_priv *priv)
 		return ret;
 	}
 
-	ret = genl_register_mc_group(&tc_gnl_family, &tc_ml_grp);
-	if (ret) {
-		tc_err(priv, MSG_EVENT, "register mc group fail: %i, grp name: %s\n",
-			ret, tc_ml_grp.name);
-		genl_unregister_family(&tc_gnl_family);
-		return ret;
-	}
-
 	return 0;
 }
 
 void tc_gentlk_exit(void)
 {
-	/* unregister mc groups */
-	genl_unregister_mc_group(&tc_gnl_family, &tc_ml_grp);
 	/*unregister the family*/
 	genl_unregister_family(&tc_gnl_family);
 }
@@ -1033,7 +1028,7 @@ int ppe_fw_load(struct tc_priv *priv)
 	u32 *dst;
 	char fw_name[48];
 
-	snprintf(fw_name, sizeof(fw_name), "%s/%s", CONFIG_VRX518_FW_PATH,
+	snprintf(fw_name, sizeof(fw_name), "%s/%s", "/lib/firmware/vrx518",
 		ppe_fw_name);
 	if (request_firmware(&priv->fw.fw, fw_name, priv->ep_dev[0].dev)) {
 		tc_err(priv, MSG_INIT,
