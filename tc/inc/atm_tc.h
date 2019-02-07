@@ -24,6 +24,7 @@
 #define __VRX318_ATM_TC_H__
 
 #include <linux/atm.h>
+#include "zy_prio_queue_map.h"
 
 /* ATM Info */
 #define CELL_SIZE		ATM_AAL0_SDU
