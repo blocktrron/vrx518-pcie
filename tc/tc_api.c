@@ -665,9 +665,12 @@ void dump_skb_info(struct tc_priv *tcpriv, struct sk_buff *skb, u32 msg_type)
 		"skb: head: 0x%x, data: 0x%x, tail: 0x%x, end: 0x%x, len: %d\n",
 		(u32)skb->head, (u32)skb->data, (u32)skb->tail,
 		(u32)skb->end, skb->len);
+// FIXME atomic read throws error
+# if 0
 	tc_dbg(tcpriv, type,
 		"skb: clone: %d, users: %d\n",
 		skb->cloned, atomic_read(&skb->users));
+# endif
 	tc_dbg(tcpriv, type,
 		"skb: nfrag: %d\n", skb_shinfo(skb)->nr_frags);
 
