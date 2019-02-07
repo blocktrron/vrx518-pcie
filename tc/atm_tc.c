@@ -54,6 +54,7 @@
 #include "inc/atm_tc.h"
 #include "inc/tc_proc.h"
 #include "inc/platform.h"
+#include "inc/zy_prio_queue_map.h"
 
 #include "inc/fw/vrx518_a1plus_addr_def.h"
 #if defined(__LITTLE_ENDIAN)
@@ -1340,7 +1341,7 @@ static int ppe_send(struct atm_vcc *vcc, struct sk_buff *skb)
 	}
 
 	/* assume LLC header + Ethernet ID: 6+2 */
-	if (__skb_put_padto(skb, ETH_ZLEN + 8))
+	if (__skb_put_padto(skb, ETH_ZLEN + 8, true))
 		goto CHECK_SHOWTIME_FAIL;
 
 	dump_skb_info(priv->tc_priv, skb, (MSG_TX | MSG_TXDATA));
@@ -2987,7 +2988,11 @@ static unsigned int atm_get_pvc_id(struct sk_buff *skb)
 		return -EINVAL;
 	}
 
+# if 0
 	return (skb->DW0 >> 3) & 0xF;
+# else
+	return 0;
+# endif
 }
 
 static int atm_get_qid_by_vcc(struct net_device *dev, struct sk_buff *skb,
