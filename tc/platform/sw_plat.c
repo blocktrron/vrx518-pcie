@@ -38,8 +38,8 @@
 #include <linux/printk.h>
 #include <linux/etherdevice.h>
 #include <linux/workqueue.h>
-#include "inc/dsl_tc.h"
 
+#include "../inc/dsl_tc.h"
 #include "../inc/tc_main.h"
 #include "../inc/reg_addr.h"
 
@@ -737,7 +737,7 @@ static void aca_soc_ring_init(struct tc_priv *priv,
 	size = sizeof(u32);
 	ring->cnt_addr = kzalloc(size, GFP_KERNEL);
 	if (!ring->cnt_addr) {
-		tc_err(priv, MSG_INIT, "Allocate cumulative counter fail!\n");
+		tc_err(priv, MSG_INIT, "Allocate cumulative counter fail!\n");
 		return;
 	}
 
