@@ -48,15 +48,17 @@ enum {
 	MSG_MIB		= BIT(14),
 };
 
+#if 0
 #define tc_level(level, priv, type, fmt, args...)	\
 do {							\
 	if (priv->msg_enable & (type))			\
 		pr_##level##_ratelimited(fmt, ##args);	\
 } while (0)
+# endif
 
 #if 1
 #define tc_dbg(priv, type, fmt, args...)		\
-	tc_level(debug, priv, type, fmt, ##args)
+	pr_debug_ratelimited(fmt, ##args)
 #else
 #define tc_dbg(priv, type, fmt, args...)		\
 	tc_level(info, priv, type, fmt, ##args)
@@ -64,7 +66,7 @@ do {							\
 #define tc_err(priv, type, fmt, args...)		\
 		pr_err_ratelimited(fmt, ##args)
 #define tc_info(priv, type, fmt, args...)		\
-	tc_level(info, priv, type, fmt, ##args)
+	pr_debug_ratelimited(fmt, ##args)
 
 #define TC_DEF_DBG	(MSG_INIT | MSG_SWITCH | MSG_EVENT | MSG_LOOPBACK)
 #define DUMP_HDR_SZ	32

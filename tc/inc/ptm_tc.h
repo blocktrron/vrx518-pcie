@@ -23,8 +23,6 @@
 #ifndef __PTM_TC_H__
 #define __PTM_TC_H__
 
-#include <linux/zy_prio_queue_map.h>
-
 #define OUTQ_DESC_PER_Q		32
 #define OUTQ_PNUM		2
 #define OUTQ_DESC_NUM		(OUTQ_DESC_PER_Q * OUTQ_PNUM)
