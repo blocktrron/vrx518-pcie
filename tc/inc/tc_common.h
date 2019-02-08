@@ -23,6 +23,8 @@
 #ifndef __TC_COMMON_H__
 #define __TC_COMMON_H__
 
+#include "reg_addr.h"
+
 #define HD_RSRV_SZ		32
 #define UMT_DEF_PERIOD		400	/* microseconds */
 
