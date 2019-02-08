@@ -41,6 +41,7 @@
 
 #include "../inc/dsl_tc.h"
 #include "../inc/tc_main.h"
+#include "../inc/tc_common.h"
 #include "../inc/reg_addr.h"
 
 
@@ -425,7 +426,7 @@ static int ring_mmap(void *mem, int size,
 	}
 	dma_unmap_single(pdev, phy_addr, size, dir);
 
-	pr_info("vaddr: 0x%x, phyaddr: 0x%lx\n", (u32)mem, phy_addr);
+	pr_info("vaddr: 0x%x, phyaddr: 0x%lx\n", (u32)mem, (long unsigned int)phy_addr);
 	addr1 = (u32)phy_addr;
 
 	if (addr)
@@ -700,7 +701,7 @@ static int plat_send(struct net_device *pdev, struct sk_buff *skb,
 }
 
 /* return virtual address */
-static void *plat_mem_alloc(size_t size, enum tc_dir dir)
+static void *plat_mem_alloc(size_t size, enum tc_dir dir, u32 *phyaddr)
 {
 	return kmalloc(size, GFP_KERNEL);
 }
@@ -862,7 +863,7 @@ static void plat_dp_exit(struct plat_priv *priv)
 static int plat_soc_cfg_get(struct soc_cfg *cfg, u32 id)
 {
 	struct plat_priv *priv = g_plat_priv;
-
+# if 0
 	/* TXIN */
 	cfg->txin_dbase = priv->soc_rings.txin.dbase_phymem;
 	cfg->txin_dnum = priv->soc_rings.txin.dnum;
@@ -890,18 +891,17 @@ static int plat_soc_cfg_get(struct soc_cfg *cfg, u32 id)
 		cfg->txout_dbase, cfg->txout_dnum, cfg->txout_cnt_phyaddr,
 		cfg->rxin_dbase, cfg->rxout_dnum, cfg->rxin_cnt_phyaddr,
 		cfg->rxout_dbase, cfg->rxout_dnum, cfg->rxout_cnt_phyaddr);
-
+# endif
 	return 0;
 }
 
-static int plat_open(struct net_device *pdev, char *dev_name,
-		int *subif, int flag)
+static int plat_open(struct net_device *pdev, const char *dev_name,
+		int subif, int flag)
 {
 	return 0;
 }
 
-static void plat_close(struct net_device *pdev, char *dev_name,
-		int subif, int flag)
+static void plat_close(struct net_device *pdev, const char *dev_name, int flag)
 {
 	return;
 }
